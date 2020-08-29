@@ -14,9 +14,9 @@ script:
 
 after_success:
   # 테스트 성공 후 각각의 운영 이미지 빌드
-  - docker build -t jeongbin/docker-frontend ./frontend
-  - docker build -t jeongbin/docker-backend ./backend
-  - docker build -t jeongbin/docker-nginx ./nginx
+  - docker build -t kilo1089/docker-frontend ./frontend
+  - docker build -t kilo1089/docker-backend ./backend
+  - docker build -t kilo1089/docker-nginx ./nginx
   
   # Travis의 환경 변수를 사용
   - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
