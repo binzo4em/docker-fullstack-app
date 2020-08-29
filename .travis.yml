@@ -21,9 +21,9 @@ after_success:
   # Travis의 환경 변수를 사용
   - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
 
-  - docker push jeongbin/docker-frontend
-  - docker push jeongbin/docker-backend
-  - docker push jeongbin/docker-nginx
+  - docker push kilo1089/docker-frontend
+  - docker push kilo1089/docker-backend
+  - docker push kilo1089/docker-nginx
 
 # deploy:
 #   provider: elasticbeanstalk
