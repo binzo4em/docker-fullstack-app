@@ -6,31 +6,34 @@ services:
   - docker
 
 before_install:
-  - docker build -t smileajw1004/react-test-app -f ./frontend/Dockerfile.dev ./frontend
+  # 테스트를 위한 개발 이미지 빌드
+  - docker build -t jeongbin/react-test-app -f ./frontend/Dockerfile.dev ./frontend
 
 script:
-  - docker run -e CI=true smileajw1004/react-test-app npm test
+  - docker run -e CI=true jeongbin/react-test-app npm run test
 
 after_success:
-  - docker build -t smileajw1004/docker-frontend ./frontend
-  - docker build -t smileajw1004/docker-backend ./backend
-  - docker build -t smileajw1004/docker-nginx ./nginx
-
+  # 테스트 성공 후 각각의 운영 이미지 빌드
+  - docker build -t jeongbin/docker-frontend ./frontend
+  - docker build -t jeongbin/docker-backend ./backend
+  - docker build -t jeongbin/docker-nginx ./nginx
+  
+  # Travis의 환경 변수를 사용
   - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
 
-  - docker push smileajw1004/docker-frontend
-  - docker push smileajw1004/docker-backend
-  - docker push smileajw1004/docker-nginx
+  - docker push jeongbin/docker-frontend
+  - docker push jeongbin/docker-backend
+  - docker push jeongbin/docker-nginx
 
-deploy:
-  provider: elasticbeanstalk
-  region: "ap-northeast-2"
-  app: "docker-fullstack-app"
-  env: "DockerFullstackApp-env"
-  bucket_name: elasticbeanstalk-ap-northeast-2-972153559337
-  bucket_path: "docker-fullstack-app"
-  on:
-    branch: master
+# deploy:
+#   provider: elasticbeanstalk
+#   region: "ap-northeast-2"
+#   app: "docker-fullstack-app"
+#   env: "DockerFullstackApp-env"
+#   bucket_name: elasticbeanstalk-ap-northeast-2-453522309776
+#   bucket_path: "docker-fullstack-app"
+#   on:
+#     branch: master
   
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: $AWS_SECRET_ACCESS_KEY
