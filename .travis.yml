@@ -13,7 +13,7 @@ script:
   - docker run -e CI=true jeongbin/react-test-app npm run test
 
 after_success:
-  # 테스트 성공 후 각각의 운영 이미지 빌드
+  # 테스트 성공 후 각각의 운영 이미지 빌드, 도커 허브 아이디를 사용해야 함 (도커 허브 아이디/이미지 이름)
   - docker build -t kilo1089/docker-frontend ./frontend
   - docker build -t kilo1089/docker-backend ./backend
   - docker build -t kilo1089/docker-nginx ./nginx
@@ -21,19 +21,20 @@ after_success:
   # Travis의 환경 변수를 사용
   - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
 
+  # 도커 허브 아이디를 사용해야 함 (도커 허브 아이디/이미지 이름)
   - docker push kilo1089/docker-frontend
   - docker push kilo1089/docker-backend
   - docker push kilo1089/docker-nginx
 
-# deploy:
-#   provider: elasticbeanstalk
-#   region: "ap-northeast-2"
-#   app: "docker-fullstack-app"
-#   env: "DockerFullstackApp-env"
-#   bucket_name: elasticbeanstalk-ap-northeast-2-453522309776
-#   bucket_path: "docker-fullstack-app"
-#   on:
-#     branch: master
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-northeast-2"
+  app: "docker-fullstack-app"
+  env: "DockerFullstackApp-env"
+  bucket_name: elasticbeanstalk-ap-northeast-2-453522309776
+  bucket_path: "docker-fullstack-app"
+  on:
+    branch: master
   
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key: $AWS_SECRET_ACCESS_KEY
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
